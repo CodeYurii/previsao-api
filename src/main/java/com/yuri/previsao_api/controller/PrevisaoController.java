@@ -2,6 +2,7 @@ package com.yuri.previsao_api.controller;
 
 import com.yuri.previsao_api.dto.PrevisaoDTO;
 import com.yuri.previsao_api.entity.Previsao;
+import com.yuri.previsao_api.repository.PrevisaoRepository;
 import com.yuri.previsao_api.service.PrevisaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +23,8 @@ public class PrevisaoController {
     private PrevisaoService previsaoService;
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private PrevisaoRepository previsaoRepository;
 
     @GetMapping
     public List<PrevisaoDTO> listarTodas() {
@@ -58,6 +62,15 @@ public class PrevisaoController {
                 new ParameterizedTypeReference<List<PrevisaoDTO>>() {}
         );
         List<PrevisaoDTO> listPrevisaoDTO = responseEntity.getBody();
+        List<Previsao> previsoes = new ArrayList<>();
+        for (PrevisaoDTO dto : listPrevisaoDTO) {
+            Previsao previsao = new Previsao();
+            previsao.setCountry(dto.getCountry());
+            previsao.setDate(dto.getDate());
+            previsao.setText(dto.getText());
+            previsoes.add(previsao);
+        }
+        previsaoRepository.saveAll(previsoes);
         return ResponseEntity.ok(listPrevisaoDTO);
     }
 }

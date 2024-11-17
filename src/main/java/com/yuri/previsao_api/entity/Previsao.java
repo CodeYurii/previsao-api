@@ -18,7 +18,7 @@ public class Previsao {
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
-    @Column(name = "text", nullable = false)
+    @Column(name = "text", nullable = false, columnDefinition = "TEXT")
     private String text;
 
     public Previsao() {}

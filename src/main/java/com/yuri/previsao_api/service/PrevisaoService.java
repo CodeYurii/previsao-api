@@ -25,21 +25,8 @@ public class PrevisaoService {
         this.restTemplate = restTemplate;
     }
 
-    public List<PrevisaoDTO> listarTodas() {
-        return previsaoRepository.findAll()
-                .stream()
-                .map(PrevisaoDTO::new)
-                .collect(Collectors.toList());
-    }
-
-    public Optional<PrevisaoDTO> buscarPorId(Long id) {
-        return previsaoRepository.findById(id)
-                .map(PrevisaoDTO::new);
-    }
-
     public PrevisaoDTO salvar(PrevisaoDTO previsaoDTO) {
-        Previsao previsao = new Previsao();
-        BeanUtils.copyProperties(previsaoDTO, previsao);
+        Previsao previsao = new Previsao(previsaoDTO); // Supondo que você tenha um construtor apropriado
         Previsao previsaoSalva = previsaoRepository.save(previsao);
         return new PrevisaoDTO(previsaoSalva);
     }

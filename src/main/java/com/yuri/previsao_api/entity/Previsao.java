@@ -1,6 +1,8 @@
 package com.yuri.previsao_api.entity;
 
+import com.yuri.previsao_api.dto.PrevisaoDTO;
 import jakarta.persistence.*;
+import org.springframework.beans.BeanUtils;
 
 import java.time.LocalDate;
 
@@ -28,6 +30,10 @@ public class Previsao {
         this.country = country;
         this.date = date;
         this.text = text;
+    }
+
+    public Previsao(PrevisaoDTO dto) {
+        BeanUtils.copyProperties(dto, this);
     }
 
     public Long getId() {

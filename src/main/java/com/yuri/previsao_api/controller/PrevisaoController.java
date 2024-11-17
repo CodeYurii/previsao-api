@@ -14,43 +14,17 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/previsao")
 public class PrevisaoController {
 
     @Autowired
-    private PrevisaoService previsaoService;
-    @Autowired
     private RestTemplate restTemplate;
+    
     @Autowired
-    private PrevisaoRepository previsaoRepository;
-
-    @GetMapping
-    public List<PrevisaoDTO> listarTodas() {
-        return previsaoService.listarTodas();
-    }
-
-    // Endpoint para buscar previsão por ID
-    @GetMapping("/{id}")
-    public ResponseEntity<PrevisaoDTO> buscarPorId(@PathVariable Long id) {
-        Optional<PrevisaoDTO> previsao = previsaoService.buscarPorId(id);
-        return previsao.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    // Endpoint para salvar uma nova previsão
-    @PostMapping
-    public PrevisaoDTO salvar(@RequestBody PrevisaoDTO previsaoDTO) {
-        return previsaoService.salvar(previsaoDTO);
-    }
-
-    // Endpoint para deletar uma previsão
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        previsaoService.deletar(id);
-        return ResponseEntity.noContent().build();
-    }
+    private PrevisaoService previsaoService;
 
     @GetMapping("/consulta")
     public ResponseEntity<List<PrevisaoDTO>> consultarApiExterna(@RequestParam String country, @RequestParam String token) {
@@ -58,19 +32,15 @@ public class PrevisaoController {
         ResponseEntity<List<PrevisaoDTO>> responseEntity = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
-                null, // Se você não precisa de um corpo na requisição, pode passar null
+                null,
                 new ParameterizedTypeReference<List<PrevisaoDTO>>() {}
         );
         List<PrevisaoDTO> listPrevisaoDTO = responseEntity.getBody();
-        List<Previsao> previsoes = new ArrayList<>();
-        for (PrevisaoDTO dto : listPrevisaoDTO) {
-            Previsao previsao = new Previsao();
-            previsao.setCountry(dto.getCountry());
-            previsao.setDate(dto.getDate());
-            previsao.setText(dto.getText());
-            previsoes.add(previsao);
+        if (listPrevisaoDTO != null) {
+            for (PrevisaoDTO dto : listPrevisaoDTO) {
+                previsaoService.salvar(dto);
+            }
         }
-        previsaoRepository.saveAll(previsoes);
         return ResponseEntity.ok(listPrevisaoDTO);
     }
 }

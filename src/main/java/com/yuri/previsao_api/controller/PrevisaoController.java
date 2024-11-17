@@ -4,6 +4,8 @@ import com.yuri.previsao_api.dto.PrevisaoDTO;
 import com.yuri.previsao_api.entity.Previsao;
 import com.yuri.previsao_api.service.PrevisaoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -47,9 +49,15 @@ public class PrevisaoController {
     }
 
     @GetMapping("/consulta")
-    public ResponseEntity<String> consultarApiExterna(@RequestParam String country, @RequestParam String token) {
+    public ResponseEntity<List<PrevisaoDTO>> consultarApiExterna(@RequestParam String country, @RequestParam String token) {
         String url = String.format("http://apiadvisor.climatempo.com.br/api/v1/anl/synoptic/locale/%s?token=%s", country, token);
-        String resultado = restTemplate.getForObject(url, String.class);
-        return ResponseEntity.ok(resultado);
+        ResponseEntity<List<PrevisaoDTO>> responseEntity = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null, // Se você não precisa de um corpo na requisição, pode passar null
+                new ParameterizedTypeReference<List<PrevisaoDTO>>() {}
+        );
+        List<PrevisaoDTO> listPrevisaoDTO = responseEntity.getBody();
+        return ResponseEntity.ok(listPrevisaoDTO);
     }
 }

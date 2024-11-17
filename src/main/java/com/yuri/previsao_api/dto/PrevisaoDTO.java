@@ -1,5 +1,6 @@
 package com.yuri.previsao_api.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.yuri.previsao_api.entity.Previsao;
 import org.springframework.beans.BeanUtils;
 
@@ -7,11 +8,10 @@ import java.time.LocalDate;
 
 
 public class PrevisaoDTO {
-    private Long id;
-    private String pais;
-    private String token;
-    private LocalDate data;
-    private String descricao;
+    private String country;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate date;
+    private String text;
 
     public PrevisaoDTO() {}
 
@@ -19,43 +19,27 @@ public class PrevisaoDTO {
         BeanUtils.copyProperties(entity, this);
     }
 
-    public Long getId() {
-        return id;
+    public String getCountry() {
+        return country;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
-    public String getPais() {
-        return pais;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setPais(String pais) {
-        this.pais = pais;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
-    public String getToken() {
-        return token;
+    public String getText() {
+        return text;
     }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public LocalDate getData() {
-        return data;
-    }
-
-    public void setData(LocalDate data) {
-        this.data = data;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setText(String text) {
+        this.text = text;
     }
 }

@@ -12,26 +12,22 @@ public class Previsao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "pais", nullable = false)
-    private String pais;
+    @Column(name = "country", nullable = false)
+    private String country;
 
-    @Column(name = "token", nullable = false)
-    private String token;
+    @Column(name = "date", nullable = false)
+    private LocalDate date;
 
-    @Column(name = "data", nullable = false)
-    private LocalDate data;
-
-    @Column(name = "descricao", nullable = false)
-    private String descricao;
+    @Column(name = "text", nullable = false)
+    private String text;
 
     public Previsao() {}
 
-    public Previsao(Long id, String pais, String token, LocalDate data, String descricao) {
+    public Previsao(Long id, String country, LocalDate date, String text) {
         this.id = id;
-        this.pais = pais;
-        this.token = token;
-        this.data = data;
-        this.descricao = descricao;
+        this.country = country;
+        this.date = date;
+        this.text = text;
     }
 
     public Long getId() {
@@ -42,46 +38,37 @@ public class Previsao {
         this.id = id;
     }
 
-    public String getPais() {
-        return pais;
+    public String getCountry() {
+        return country;
     }
 
-    public void setPais(String pais) {
-        this.pais = pais;
+    public void setCountry(String pais) {
+        this.country = pais;
     }
 
-    public String getToken() {
-        return token;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setDate(LocalDate data) {
+        this.date = data;
     }
 
-    public LocalDate getData() {
-        return data;
+    public String getText() {
+        return text;
     }
 
-    public void setData(LocalDate data) {
-        this.data = data;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setText(String descricao) {
+        this.text = descricao;
     }
 
     @Override
     public String toString() {
         return "Previsao{" +
                 "id=" + id +
-                ", pais='" + pais + '\'' +
-                ", token='" + token + '\'' +
-                ", data=" + data +
-                ", descricao='" + descricao + '\'' +
+                ", pais='" + country + '\'' +
+                ", data=" + date +
+                ", descricao='" + text + '\'' +
                 '}';
     }
 

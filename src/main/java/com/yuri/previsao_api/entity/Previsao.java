@@ -7,7 +7,7 @@ import org.springframework.beans.BeanUtils;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "Previsao")
+@Table(name = "previsao")
 public class Previsao {
 
     @Id
